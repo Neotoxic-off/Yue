@@ -1,9 +1,36 @@
 # Yue
 📚 Yue is a library made to simplify lisibility reading of .NET projects
 
-The `Yue` library provides a set of utility functions for performing common logical and condition checks. These functions are designed to be used for scenarios such as evaluating conditions, checking equality, determining value ranges, and more. The library follows clean coding practices and aims to make conditional logic more concise and readable.
-
-## Namespace: `Yue`
+1. [Yue Library Overview](#yue)
+2. [Namespace: `Yue`](#namespace-yue)
+3. [Available Methods](#available-methods)
+    1. [Or<T>(T value, params T[] options)](#1-ort-value-t-value-params-t-options)
+    2. [And(params Func<bool>[] conditions)](#2-andparams-funcbool-conditions)
+    3. [EqualsAny<T>(T value, params T[] options)](#3-equalsanyt-value-t-value-params-t-options)
+    4. [EqualsAll<T>(T value, params T[] options)](#4-equalsallt-value-t-value-params-t-options)
+    5. [Between(int value, int lower, int upper, bool inclusive = true)](#5-betweenint-value-int-lower-int-upper-bool-inclusive--true)
+    6. [InSet<T>(T value, IEnumerable<T> set)](#6-insett-value-t-value-ienumerablet-set)
+    7. [Not(bool condition)](#7-notbool-condition)
+    8. [InRange(int value, int lower, int upper, bool inclusive = true)](#8-inrangeint-value-int-lower-int-upper-bool-inclusive--true)
+    9. [AllMatch<T>(IEnumerable<T> values, Func<T, bool> condition)](#9-allmatcht-ienumerablet-values-funct-bool-condition)
+    10. [AnyMatch<T>(IEnumerable<T> values, Func<T, bool> condition)](#10-anymatcht-ienumerablet-values-funct-bool-condition)
+    11. [NoneMatch<T>(IEnumerable<T> values, Func<T, bool> condition)](#11-nonematcht-ienumerablet-values-funct-bool-condition)
+4. [Collections Utilities](#collections-utilities)
+    1. [Map<TInput, TOutput>(IEnumerable<TInput> collection, Func<TInput, TOutput> transform)](#maptinput-toutputienumerabletinput-collection-functinput-toutput-transform)
+    2. [Filter<T>(IEnumerable<T> collection, Func<T, bool> predicate)](#filtert-ienumerablet-collection-functbool-predicate)
+    3. [Reduce<T, TAccumulate>(IEnumerable<T> collection, Func<TAccumulate, T, TAccumulate> accumulator, TAccumulate initialValue)](#reducet-taccumulateienumerablet-collection-functaccumulatet-t-taccumulate-accumulator-taccumulate-initialvalue)
+    4. [Repeat(int times, Action action)](#repeatint-times-action-action)
+    5. [WhileTrue(Func<bool> condition, Action action)](#whiletruefunctbool-condition-action-action)
+    6. [Chunk<T>(IEnumerable<T> collection, int chunkSize)](#chunkt-ienumerablet-collection-int-chunksize)
+5. [Variables Utilities](#variables-utilities)
+    1. [Swap<T>(ref T x, ref T y)](#swapt-ref-t-x-ref-t-y)
+    2. [DefaultIfNull<T>(T variable, T defaultValue)](#defaultifnullt-t-variable-t-defaultvalue)
+    3. [Coalesce<T>(params T[] values)](#coalescet-t-params-t-values)
+    4. [LazyLoad<T>(Func<T> initializer)](#lazyloadt-funct-initializer)
+    5. [MinMax<T>(IEnumerable<T> collection)](#minmaxt-ienumerablet-collection)
+    6. [Clamp<T>(T value, T min, T max)](#clampt-t-value-t-min-t-max)
+    7. [Toggle(ref bool flag)](#toggleref-bool-flag)
+    8. [RoundToNearest(double value, double increment)](#roundtonearestdouble-value-double-increment)
 
 The `Conditions` class in the `Yue` namespace provides the following logical functions:
 
