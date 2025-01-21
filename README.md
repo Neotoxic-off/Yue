@@ -1,5 +1,5 @@
 # Yue
-📚 Yue is a library made to simplify lisibility for .NET projects
+📚 Yue is a library made to simplify lisibility reading of .NET projects
 
 ## Condition
 - [ ] Or
