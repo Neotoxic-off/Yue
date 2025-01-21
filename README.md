@@ -1,40 +1,340 @@
 # Yue
 📚 Yue is a library made to simplify lisibility reading of .NET projects
 
-## Condition
-- [ ] Or: Returns true if the value matches any of the provided options (e.g., Or(value, 1, 2, 3)).
-- [ ] And: Returns true if the value satisfies all conditions (e.g., And(value > 0, value < 10)).
-- [ ] Nor: Returns true if the value matches none of the provided options (logical NOT of Or).
-- [ ] Xnor
-- [ ] Xor (Exclusive Or): Returns true if the value matches exactly one of the provided options (e.g., Xor(value, 1, 2, 3) returns true if value is only 1, 2, or 3).
-- [ ]Xand (Exclusive And): Returns true if the value satisfies exactly one and only one condition in a set of boolean conditions (e.g., Xand(condition1, condition2) is true if only one of the conditions is true).
-- [ ] Nand: Returns true if not all conditions are satisfied (logical NOT of And).
-- [ ] EqualsAny: Returns true if the value equals any of the provided options (similar to Or but for equality checks).
-- [ ] EqualsAll: Returns true if the value equals all of the provided options (useful for strict comparison scenarios).
-- [ ] Between: Returns true if a numeric value lies between two bounds (with options for inclusive or exclusive bounds).
-- [ ] InSet: A more general version of Or that works with any collection to check if a value exists in the set (e.g., InSet(value, mySet)).
-- [ ] Not: Returns true if a condition is not met (logical negation, Not(condition)).
-- [ ] InRange: Determine if a numeric value falls within a given range.
-- [ ] AllMatch: Verify that all values in a list meet a condition.
-- [ ] AnyMatch: Check if any value in a list meets a condition.
-- [ ] NoneMatch: Ensure no values in a list meet a condition.
-- [ ] CustomMatch: Accept a custom function (Func<T, bool>) to determine a match.
+The `Yue` library provides a set of utility functions for performing common logical and condition checks. These functions are designed to be used for scenarios such as evaluating conditions, checking equality, determining value ranges, and more. The library follows clean coding practices and aims to make conditional logic more concise and readable.
 
-## Loop
-- [ ] Map: Transform each item in a collection and return a new collection (e.g., Map(collection, x => x * 2)).
-- [ ] Filter: Return items from a collection that satisfy a condition (e.g., Filter(collection, x => x > 10)).
-- [ ] Reduce: Aggregate values in a collection into a single result (e.g., sum, max).
-- [ ] Repeat: Execute a function or action a specified number of times (e.g., Repeat(5, () => DoSomething())).
-- [ ] WhileTrue: Continuously execute a block while a condition is true (useful for dynamic break conditions).
-- [ ] Chunk: Divide a collection into smaller chunks of a given size (e.g., Chunk(collection, 5)).
+## Namespace: `Yue`
 
-## Variable
-- [ ] Swap: Swap the values of two variables (Swap(ref x, ref y)).
-- [ ] DefaultIfNull: Return a default value if the variable is null.
-- [ ] Coalesce: Return the first non-null value from a list of variables (e.g., Coalesce(var1, var2, defaultValue)).
-- [ ] LazyLoad: Initialize a variable only when it’s accessed for the first time.
-- [ ] MinMax: Find both the minimum and maximum in a single pass of a collection.
-- [ ] Clamp: Ensure a value stays within a specific range (e.g., Clamp(value, min, max)).
-- [ ] Toggle: Flip a boolean value (e.g., Toggle(ref isActive)).
-- [ ] RoundToNearest: Round a number to the nearest specified increment (e.g., nearest 0.5 or 10).
-- [ ] CastOrDefault: Safely cast a variable to a type, with a fallback if the cast fails.
+The `Conditions` class in the `Yue` namespace provides the following logical functions:
+
+## Available Methods
+
+### 1. `Or<T>(T value, params T[] options)`
+
+**Usage**: Checks if the provided value is equal to any of the options.
+
+```csharp
+bool result = Conditions.Or(5, 1, 3, 5, 7); // Returns true because 5 is one of the options.
+```
+
+- **Parameters**:
+  - `value` (T): The value to compare.
+  - `options` (T[]): A list of options to compare against.
+  
+- **Returns**: 
+  - `true` if the value matches any of the options, otherwise `false`.
+
+---
+
+### 2. `And(params Func<bool>[] conditions)`
+
+**Usage**: Checks if all provided conditions are `true`.
+
+```csharp
+bool result = Conditions.And(() => 5 > 3, () => "Hello" == "Hello"); // Returns true.
+```
+
+- **Parameters**:
+  - `conditions`: An array of conditions represented by `Func<bool>` delegates.
+
+- **Returns**: 
+  - `true` if all conditions evaluate to `true`, otherwise `false`.
+
+---
+
+### 3. `EqualsAny<T>(T value, params T[] options)`
+
+**Usage**: Checks if the provided value is equal to any of the options.
+
+```csharp
+bool result = Conditions.EqualsAny(10, 5, 10, 15); // Returns true because 10 is one of the options.
+```
+
+- **Parameters**:
+  - `value` (T): The value to check.
+  - `options` (T[]): A list of options to compare against.
+
+- **Returns**: 
+  - `true` if the value is equal to any of the options, otherwise `false`.
+
+---
+
+### 4. `EqualsAll<T>(T value, params T[] options)`
+
+**Usage**: Checks if the provided value is equal to all of the options.
+
+```csharp
+bool result = Conditions.EqualsAll(10, 10, 10, 10); // Returns true because all options are equal to 10.
+```
+
+- **Parameters**:
+  - `value` (T): The value to compare against.
+  - `options` (T[]): A list of options to compare with.
+
+- **Returns**: 
+  - `true` if the value is equal to all of the options, otherwise `false`.
+
+---
+
+### 5. `Between(int value, int lower, int upper, bool inclusive = true)`
+
+**Usage**: Determines whether a numeric value lies between two bounds.
+
+```csharp
+bool result = Conditions.Between(7, 5, 10); // Returns true because 7 is between 5 and 10.
+bool resultExclusive = Conditions.Between(5, 5, 10, false); // Returns false because the bound is exclusive.
+```
+
+- **Parameters**:
+  - `value` (int): The value to check.
+  - `lower` (int): The lower bound.
+  - `upper` (int): The upper bound.
+  - `inclusive` (bool, default = `true`): Determines whether the bounds are inclusive or exclusive.
+  
+- **Returns**: 
+  - `true` if the value lies between the lower and upper bounds (inclusive or exclusive based on the `inclusive` parameter).
+
+---
+
+### 6. `InSet<T>(T value, IEnumerable<T> set)`
+
+**Usage**: Checks if a value is present within a given set of values.
+
+```csharp
+bool result = Conditions.InSet(5, new List<int> { 1, 2, 5, 8 }); // Returns true because 5 is in the set.
+```
+
+- **Parameters**:
+  - `value` (T): The value to check.
+  - `set` (IEnumerable<T>): The set to check if the value exists in.
+  
+- **Returns**: 
+  - `true` if the value is in the set, otherwise `false`.
+
+---
+
+### 7. `Not(bool condition)`
+
+**Usage**: Performs a logical negation of a condition.
+
+```csharp
+bool result = Conditions.Not(true); // Returns false because the condition is negated.
+```
+
+- **Parameters**:
+  - `condition` (bool): The condition to negate.
+  
+- **Returns**: 
+  - `true` if the condition is `false`, otherwise `false`.
+
+---
+
+### 8. `InRange(int value, int lower, int upper, bool inclusive = true)`
+
+**Usage**: Determines whether a numeric value falls within a specific range.
+
+```csharp
+bool result = Conditions.InRange(8, 5, 10); // Returns true because 8 is in the range 5 to 10.
+```
+
+- **Parameters**:
+  - `value` (int): The value to check.
+  - `lower` (int): The lower bound of the range.
+  - `upper` (int): The upper bound of the range.
+  - `inclusive` (bool, default = `true`): Determines whether the bounds are inclusive or exclusive.
+
+- **Returns**: 
+  - `true` if the value falls within the range (inclusive or exclusive based on the `inclusive` parameter).
+
+---
+
+### 9. `AllMatch<T>(IEnumerable<T> values, Func<T, bool> condition)`
+
+**Usage**: Checks if all elements in a collection satisfy a given condition.
+
+```csharp
+bool result = Conditions.AllMatch(new List<int> { 1, 2, 3 }, v => v > 0); // Returns true because all values are greater than 0.
+```
+
+- **Parameters**:
+  - `values` (IEnumerable<T>): The collection of values to check.
+  - `condition` (Func<T, bool>): The condition to apply to each element.
+
+- **Returns**: 
+  - `true` if all elements satisfy the condition, otherwise `false`.
+
+---
+
+### 10. `AnyMatch<T>(IEnumerable<T> values, Func<T, bool> condition)`
+
+**Usage**: Checks if any element in a collection satisfies a given condition.
+
+```csharp
+bool result = Conditions.AnyMatch(new List<int> { 1, 2, 3 }, v => v == 2); // Returns true because 2 is in the collection.
+```
+
+- **Parameters**:
+  - `values` (IEnumerable<T>): The collection of values to check.
+  - `condition` (Func<T, bool>): The condition to apply to each element.
+
+- **Returns**: 
+  - `true` if any element satisfies the condition, otherwise `false`.
+
+---
+
+### 11. `NoneMatch<T>(IEnumerable<T> values, Func<T, bool> condition)`
+
+**Usage**: Ensures that no element in a collection satisfies a given condition.
+
+```csharp
+bool result = Conditions.NoneMatch(new List<int> { 1, 2, 3 }, v => v == 5); // Returns true because no elements are equal to 5.
+```
+
+- **Parameters**:
+  - `values` (IEnumerable<T>): The collection of values to check.
+  - `condition` (Func<T, bool>): The condition to apply to each element.
+
+- **Returns**: 
+  - `true` if no elements satisfy the condition, otherwise `false`.
+
+
+## Collections Utilities
+
+### `Map<TInput, TOutput>(IEnumerable<TInput> collection, Func<TInput, TOutput> transform)`
+Transforms each item in a collection using the provided function and returns a new collection.
+
+**Example usage:**
+```csharp
+var numbers = new List<int> { 1, 2, 3, 4, 5 };
+var doubled = Collections.Map(numbers, x => x * 2);
+// Output: { 2, 4, 6, 8, 10 }
+```
+
+### `Filter<T>(IEnumerable<T> collection, Func<T, bool> predicate)`
+Filters the items in a collection that satisfy a given condition.
+
+**Example usage:**
+```csharp
+var numbers = new List<int> { 1, 2, 3, 4, 5 };
+var evenNumbers = Collections.Filter(numbers, x => x % 2 == 0);
+// Output: { 2, 4 }
+```
+
+### `Reduce<T, TAccumulate>(IEnumerable<T> collection, Func<TAccumulate, T, TAccumulate> accumulator, TAccumulate initialValue)`
+Reduces the collection into a single value by applying an accumulator function.
+
+**Example usage:**
+```csharp
+var numbers = new List<int> { 1, 2, 3, 4, 5 };
+var sum = Collections.Reduce(numbers, (acc, x) => acc + x, 0);
+// Output: 15
+```
+
+### `Repeat(int times, Action action)`
+Repeatedly executes a given action a specified number of times.
+
+**Example usage:**
+```csharp
+Collections.Repeat(3, () => Console.WriteLine("Hello, World!"));
+// Output: Hello, World! (printed 3 times)
+```
+
+### `WhileTrue(Func<bool> condition, Action action)`
+Continuously executes a block of code while a condition is true.
+
+**Example usage:**
+```csharp
+int counter = 0;
+Collections.WhileTrue(() => counter < 5, () => { counter++; Console.WriteLine(counter); });
+// Output: 1 2 3 4 5
+```
+
+### `Chunk<T>(IEnumerable<T> collection, int chunkSize)`
+Divides a collection into smaller chunks of a specified size.
+
+**Example usage:**
+```csharp
+var numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+var chunks = Collections.Chunk(numbers, 3);
+// Output: { {1, 2, 3}, {4, 5, 6}, {7, 8} }
+```
+
+## Variables Utilities
+
+### `Swap<T>(ref T x, ref T y)`
+Swaps the values of two variables.
+
+**Example usage:**
+```csharp
+int a = 5, b = 10;
+Variables.Swap(ref a, ref b);
+// After swapping, a = 10, b = 5
+```
+
+### `DefaultIfNull<T>(T variable, T defaultValue)`
+Returns the default value if the variable is null.
+
+**Example usage:**
+```csharp
+string name = null;
+var result = Variables.DefaultIfNull(name, "Default Name");
+// Output: "Default Name"
+```
+
+### `Coalesce<T>(params T[] values)`
+Returns the first non-null value from a list of variables.
+
+**Example usage:**
+```csharp
+string a = null, b = "Hello", c = "World";
+var result = Variables.Coalesce(a, b, c);
+// Output: "Hello"
+```
+
+### `LazyLoad<T>(Func<T> initializer)`
+Lazily initializes a variable when it is accessed for the first time.
+
+**Example usage:**
+```csharp
+var lazyValue = Variables.LazyLoad(() => "This is lazy loaded");
+// Output: "This is lazy loaded" (initialized when accessed)
+```
+
+### `MinMax<T>(IEnumerable<T> collection)`
+Finds both the minimum and maximum value in a collection in a single pass.
+
+**Example usage:**
+```csharp
+var numbers = new List<int> { 1, 3, 2, 7, 4 };
+var (min, max) = Variables.MinMax(numbers);
+// Output: min = 1, max = 7
+```
+
+### `Clamp<T>(T value, T min, T max)`
+Ensures that a value stays within a specific range.
+
+**Example usage:**
+```csharp
+int value = 10;
+var clampedValue = Variables.Clamp(value, 5, 8);
+// Output: 8 (since 10 is outside the range 5-8)
+```
+
+### `Toggle(ref bool flag)`
+Flips the value of a boolean variable.
+
+**Example usage:**
+```csharp
+bool isActive = true;
+Variables.Toggle(ref isActive);
+// Output: isActive = false
+```
+
+### `RoundToNearest(double value, double increment)`
+Rounds a number to the nearest specified increment.
+
+**Example usage:**
+```csharp
+double result = Variables.RoundToNearest(7.24, 0.5);
+// Output: 7.0
+```
