@@ -20,6 +20,18 @@
         }
 
         /// <summary>
+        /// Performs a logical OR operation to check if any of the provided boolean options is <c>true</c>.
+        /// </summary>
+        /// <param name="options">An array of boolean values to evaluate.</param>
+        /// <returns>
+        /// Returns <c>true</c> if any of the provided options is <c>true</c>; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool Or(params bool[] options)
+        {
+            return options.Contains(true);
+        }
+
+        /// <summary>
         /// Performs a logical AND operation on multiple conditions. 
         /// Returns <c>true</c> if all conditions are <c>true</c>.
         /// </summary>
